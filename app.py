@@ -8,11 +8,19 @@ MODEL_PATH = "model.bin"
 DATA_PATH = "Dataset_CCE2.xlsx - train.csv"
 TRAIN_TXT_PATH = "train_fasttext.txt"
 
+import string
+
 def clean_text(text):
     if not isinstance(text, str):
         return ""
-    # Basic cleaning for fasttext
+    # Basic cleaning
     text = re.sub(r'\n', ' ', text)
+    # Remove Hindi and English punctuation so FastText tokenizes words correctly
+    hindi_punc = "।!?,.'\"()-" + string.punctuation
+    for p in hindi_punc:
+        text = text.replace(p, ' ')
+    # Remove extra spaces
+    text = re.sub(r'\s+', ' ', text)
     return text.strip()
 
 @st.cache_resource
